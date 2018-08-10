@@ -1,0 +1,40 @@
+{
+  "name": "passwd_as_a_service",
+  "version": "1.0.0",
+  "description": "This program creates a minimal HTTP service that exposes the user and group information on a UNIX-like system, that is usually locked away in the UNIX `/etc/passwd` and `/etc/groups` files.",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js --exec babel-node",
+    "test": "mocha --compilers babel-register"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ksnovak/passwd_as_a_service.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ksnovak/passwd_as_a_service/issues"
+  },
+  "homepage": "https://github.com/ksnovak/passwd_as_a_service#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
+    "eslint": "^5.3.0",
+    "eslint-plugin-import": "^2.13.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.3"
+  },
+  "babel": {
+    "presets": [
+      "latest"
+    ]
+  }
+}
