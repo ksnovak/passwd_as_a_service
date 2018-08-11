@@ -2,7 +2,9 @@ import fs from 'fs';
 import minimist from 'minimist'
 import 'babel-polyfill'
 import { promisify } from 'es6-promisify'
+import chokidar from 'chokidar'
 
+let watcher = chokidar.watch()
 
 module.exports = {
 	//Default options to use for command-line args
@@ -37,4 +39,27 @@ module.exports = {
 		}
 	},
 
+	//Watch the specified file for any changes, and run the appropriate callback as needed
+	watchFile: async function(path, changedCallback, otherCallback) {
+		if (this.doesFileExist(path)) {
+			watcher.add(path).on('all', (event, path) => {
+
+				if (event == 'change') {
+					if (changedCallback)
+						changedCallback()
+				}
+
+				//unlink and unlinkDir means either the file or directory got deleted; error is any kind of error
+				else if (event in ['unlink', 'unlinkDir', 'error']) {
+					if (otherCallback)
+						otherCallback()
+				}
+			})
+		}
+	},
+
+	//Remove the specified file from the watch list
+	unwatchFile: async function(path) {
+		watcher.unwatch(path)
+	}
 }

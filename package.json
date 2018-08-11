@@ -24,9 +24,11 @@
   },
   "homepage": "https://github.com/ksnovak/passwd_as_a_service#readme",
   "dependencies": {
+    "chokidar": "^2.0.4",
     "es6-promisify": "^6.0.0",
     "express": "^4.16.3",
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.0",
+    "moment": "^2.22.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
