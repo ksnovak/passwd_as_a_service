@@ -4,14 +4,10 @@ import 'babel-polyfill'
 
 var expect = chai.expect
 
-describe('File reading', () => {
+describe('File operations', () => {
 	describe('Default file locations', () => {
 		it ('Should have a default /etc/passwd location', () => { expect(fileReader.minimistOptions.default).to.have.property('passwd') })
 		it ('Should have a default /etc/groups location', () => { expect(fileReader.minimistOptions.default).to.have.property('groups') })
-		it ('Should alert if passwd could not be found')
-		it ('Should alert if groups could not be found')
-		it ('Should alert if passwd is malformed')
-		it ('Should alert if groups is malformed')
 	})
 
 	describe('Custom file locations', () => {
@@ -52,15 +48,13 @@ describe('File reading', () => {
 	})
 
 	describe.skip('Updates', () => {
-		it('Should notice if the passwd file got updated')
-		it('Should notice if the groups file got updated')
-		it('Should re-read the passwd file if it gets updated')
-		it('Should re-read the groups file if it gets updated')
+		it('Should notice if the specified file got updated')
+		it('Should re-read the specified file if it gets updated')
 	})
 
 	describe.skip('Parser', () => {
-		it ('Should alert if passwd is malformed')
-		it ('Should alert if groups is malformed')
+		it('Should alert if passwd is malformed')
+		it('Should alert if groups is malformed')
 		it('Can interpret a single user')
 		it('Can interpret multiple users')
 		it('Will alert on malformed data')
