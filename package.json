@@ -4,12 +4,12 @@
   "description": "This program creates a minimal HTTP service that exposes the user and group information on a UNIX-like system, that is usually locked away in the UNIX `/etc/passwd` and `/etc/groups` files.",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon src/server.js --exec babel-node -- ",
+    "dev": "nodemon src/server.js --exec babel-node",
     "test": "mocha",
     "test:min": "mocha --reporter min",
     "test:watch": "mocha --watch",
     "build": "babel src -d compiled",
-    "serve": "node compiled/server.js ",
+    "serve": "node compiled/server.js",
     "build+serve": "npm run build && npm run serve"
   },
   "repository": {
