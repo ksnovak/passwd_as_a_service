@@ -13,9 +13,37 @@ module.exports = {
 		default: {passwd: '/etc/passwd', groups: '/etc/groups'}
 	},
 
+	//Common error object to be thrown when something requested is not found
 	fileNotFound: {
 		name: 404,
 		message: 'File not found'
+	},
+
+	malformed: {
+		name: 'Malformed',
+		message: 'File is malformed'
+	},
+
+	//Class to build user objects, with a function to make sure it is properly formed
+	User: class {
+		constructor(data) {
+			let elems = data.split(':')
+
+			//There needs to be 7 properties in each line to be correctly formed. If it doesn't pass that check, it's invalid
+			if (elems.length == 7) {
+				this.name = elems[0];
+				//elems[1] is password, which will always just be an x
+				this.uid = Number(elems[2]);
+				this.gid = Number(elems[3]);
+				this.comment = elems[4];
+				this.home = elems[5];
+				this.shell = elems[6];
+			}
+		}
+
+		isValid() {
+			return (this.name && (this.uid || this.uid == 0)  && (this.gid || this.gid == 0) && (typeof this.comment == 'string') && this.home && this.shell)
+		}
 	},
 
 	//Interpret the command-line arguments passed, using defaults as needed
@@ -48,17 +76,14 @@ module.exports = {
 		try {
 			let fileExists = await this.doesFileExist(path)
 			if (fileExists) {
-				fs.readFile(path, (err, data) => {
-					if (err) {
-						throw err;
-					}
-					else {
-						let contents = data.toString()
-						if (callback)
-							callback(contents)
-					}
 
-				})
+				let contents = await promisify(fs.readFile)(path)
+				contents = contents.toString()
+
+				if (callback)
+					callback(contents)
+
+				return contents
 			}
 			else {
 				throw this.fileNotFound
@@ -67,7 +92,48 @@ module.exports = {
 		catch (err) {
 			throw this.fileNotFound
 		}
+	},
 
+	getPasswd: async function(path, callback) {
+		try {
+			let contents = await this.readFile(path)
+			if (contents) {
+				return this.parsePasswd(contents)
+			}
+			else {
+				return []
+			}
+
+		}
+		catch (err) {
+			throw this.fileNotFound
+		}
+	},
+
+	parsePasswd: function(contents) {
+		let users = []
+		let lines = contents.split('\n')
+
+		lines.map(line => {
+			let user = new this.User(line)
+
+			if (user.isValid()) {
+				users.push(user)
+			}
+			else {
+				throw this.malformed
+			}
+		})
+
+		console.log(`lines: ${lines.length}, users: ${users.length}`)
+
+		//Only return users if every single line was valid.
+		if (lines.length == users.length) {
+			return users
+		}
+		else {
+			throw this.malformed
+		}
 	},
 
 	//Watch the specified file for any changes, and run the appropriate callback as needed

@@ -123,10 +123,26 @@ describe('File operations', () => {
 		it('Gives a 404 on trying to read a non-existent file', async function() {
 			return expect(fileReader.readFile('this/doesnt/exist')).to.be.rejectedWith(fileReader.fileNotFound)
 		})
-		it('Can interpret multiple users')
-		it('Can interpret a single user')
-		it('Will handle empty data')
-		it('Will alert if passwd is malformed')
+		it('Can interpret multiple users', async function() {
+			let path = 'etc/passwd'
+
+			expect(await fileReader.getPasswd(path)).to.be.an('array')
+
+		})
+		it('Can interpret a single user', async function() {
+			let path = 'test/testdata/passwd_single'
+			expect(await fileReader.getPasswd(path)).to.be.an('array')
+				.and.have.lengthOf(1)
+		})
+		it('Will handle empty data', async function() {
+			let path = 'test/testdata/passwd_empty'
+			expect(await fileReader.getPasswd(path)).to.be.an('array')
+				.and.have.lengthOf(0)
+		})
+		it('Will alert if passwd is malformed', async function() {
+			let path = 'test/testdata/passwd_malformed'
+			return expect(fileReader.getPasswd(path)).to.be.rejectedWith(fileReader.malformed)
+		})
 		it('Will alert if groups is malformed')
 
 	})
