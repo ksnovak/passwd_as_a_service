@@ -1,6 +1,6 @@
 import chai from 'chai'
-import server from '../src/server.js'
 import fileReader from '../src/fileReader.js'
+import 'babel-polyfill'
 
 var expect = chai.expect
 
@@ -16,7 +16,6 @@ describe('File reading', () => {
 
 	describe('Custom file locations', () => {
 		it ('Should accept a custom passwd location', () => {
-
 			let customLocation = '/etc/passwurd'
 			let parsedArgs = fileReader.parseArgs(['--passwd', customLocation])
 			expect(parsedArgs).to.have.property('passwd')
@@ -24,7 +23,6 @@ describe('File reading', () => {
 
 		})
 		it ('Should accept a custom groups location', () => {
-
 			let customLocation = '/etc/groops'
 			let parsedArgs = fileReader.parseArgs(['--groups', customLocation])
 			expect(parsedArgs).to.have.property('groups')
@@ -39,21 +37,32 @@ describe('File reading', () => {
 			let parsedArgs = fileReader.parseArgs(['--groups', '--passwd', '--/etc/pasward'])
 			expect(parsedArgs.groups).to.equal(fileReader.minimistOptions.default.groups)
 		})
-
-		it ('Should alert if passwd could not be found')
-		it ('Should alert if groups could not be found')
-		it ('Should alert if passwd is malformed')
-		it ('Should alert if groups is malformed')
 	})
 
-	describe('Updates', () => {
+	describe('File opening', () => {
+		it ('Can find an existing file', async function() {
+			let asdf = await fileReader.doesFileExist('etc/passwd')
+			console.log(asdf)
+			expect(asdf).to.be.true
+		})
+		it ('Should alert if file could not be found', async function () {
+			expect(await fileReader.doesFileExist('this/doesnt/exist.json')).to.be.false
+		})
+		it ('Should not accept a directory as the filename', async function () {
+			expect(await fileReader.doesFileExist('etc/')).to.be.false
+		})
+	})
+
+	describe.skip('Updates', () => {
 		it('Should notice if the passwd file got updated')
 		it('Should notice if the groups file got updated')
 		it('Should re-read the passwd file if it gets updated')
 		it('Should re-read the groups file if it gets updated')
 	})
 
-	describe('Parser', () => {
+	describe.skip('Parser', () => {
+		it ('Should alert if passwd is malformed')
+		it ('Should alert if groups is malformed')
 		it('Can interpret a single user')
 		it('Can interpret multiple users')
 		it('Will alert on malformed data')

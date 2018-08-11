@@ -7,6 +7,7 @@
     "dev": "nodemon src/server.js --exec babel-node -- ",
     "test": "mocha",
     "test:min": "mocha --reporter min",
+    "test:watch": "mocha --watch",
     "build": "babel src -d compiled",
     "serve": "node compiled/server.js ",
     "build+serve": "npm run build && npm run serve"
