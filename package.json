@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon src/server.js --exec babel-node -- ",
-    "test": "mocha --require babel-register --exit",
+    "test": "mocha",
+    "test:min": "mocha --reporter min",
     "build": "babel src -d compiled",
     "serve": "node compiled/server.js ",
     "build+serve": "npm run build && npm run serve"
@@ -22,11 +23,13 @@
   },
   "homepage": "https://github.com/ksnovak/passwd_as_a_service#readme",
   "dependencies": {
+    "es6-promisify": "^6.0.0",
     "express": "^4.16.3",
     "minimist": "^1.2.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
     "chai": "^4.1.2",
@@ -35,10 +38,5 @@
     "eslint-plugin-import": "^2.13.0",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.3"
-  },
-  "babel": {
-    "presets": [
-      "latest"
-    ]
   }
 }
