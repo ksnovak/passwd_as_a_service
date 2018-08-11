@@ -6,6 +6,16 @@ This program creates a minimal HTTP service that exposes the user and group info
 * If input files are absent or malformed, servie must indicate an appropriate error
 * Service should be able to handle changes in the underlying passwd and groups files while the service is running
 
+# Terminal commands
+* `npm run dev` - Fires up a nodemon process of the server to run it indefinitely
+* `npm test` - Run Mocha tests
+* `npm run build` - Runs babel on the es6 code and compiles it into the `/compiled/` directory
+* `npm run serve` - Runs the compiled code from `/compiled/`
+* `npm run build+serve` - Combines the two previous commands
+
+* `npm run dev --passwd /etc/passwd --groups /etc/groups` - Runs the nodemon process with custom passwd and/or groups files
+* `npm run serve --passwd /etc/passwd --groups /etc/groups` - Runs the compiled js with custom passwd and/or groups files
+
 # Routes:
 * `GET /users` - List of all users in the system, as defined in /etc/passwd file
 	* Example response: `[{“name”: “root”, “uid”: 0, “gid”: 0, “comment”: “root”, “home”: “/root”, “shell”: “/bin/bash”},  {“name”: “dwoodlins”, “uid”: 1001, “gid”: 1001, “comment”: “”, “home”:  “/home/dwoodlins”, “shell”: “/bin/false”}]`

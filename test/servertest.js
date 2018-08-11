@@ -1,6 +1,6 @@
 import chai from 'chai'
 import chaiHttp from 'chai-http'
-import server from '../server.js'
+import server from '../src/server.js'
 
 var expect = chai.expect
 
