@@ -1,6 +1,6 @@
 import chai from 'chai'
 import chaiHttp from 'chai-http'
-import server from '../src/server.js'
+import { server } from '../src/server.js'
 
 var expect = chai.expect
 
@@ -17,14 +17,14 @@ describe('API', () => {
 		})
 	})
 
-	describe('Users', () => {
-		describe('GET /users', () => {
+	describe.skip('Users', () => {
+		describe.skip('GET /users', () => {
 			it('Returns a list of users in the /etc/passwd file')
 			it('Handles an empty file')
 			it('Errors on a malformed file')
 			it('Errors on a non-existent file')
 		})
-		describe('GET /users/query', () => {
+		describe.skip('GET /users/query', () => {
 			//TODO: Need many tests with variety of query params. name, uid, gid, comment, home, shell
 			it('Returns a list of users matching the specified query fields')
 			it('Returns all users with the specified name')
@@ -38,12 +38,12 @@ describe('API', () => {
 			it('Errors on a malformed file')
 			it('Errors on a non-existent file')
 		})
-		describe('GET /users/:uid', () => {
+		describe.skip('GET /users/:uid', () => {
 			it('Returns a user with a matching uid')
 			it('Returns a 404 if no user is found')
 			it('Handles a malformed uid')
 		})
-		describe('GET /users/:uid/groups', () => {
+		describe.skip('GET /users/:uid/groups', () => {
 			it('Returns all groups for the given user')
 			it('Handles a non-existent user')
 			it('Handles a user without groups')
@@ -51,14 +51,14 @@ describe('API', () => {
 		})
 	})
 
-	describe('Groups', () => {
-		describe('GET /groups', () => {
+	describe.skip('Groups', () => {
+		describe.skip('GET /groups', () => {
 			it('Returns a list of all groups in the system, in /etc/group')
 			it('Handles an empty file')
 			it('Errors on a malformed file')
 			it('Errors on a non-existent file')
 		})
-		describe('GET /groups/query', () => {
+		describe.skip('GET /groups/query', () => {
 			//Need many tests with variety of query params. name, gid, member (member is repeatable)
 			it('Returns a list of groups matching all specified fields')
 			it('Returns groups matching a specified name')
@@ -71,7 +71,7 @@ describe('API', () => {
 			it('Errors on a malformed file')
 			it('Errors on a non-existent file')
 		})
-		describe('GET /groups/:gid', () => {
+		describe.skip('GET /groups/:gid', () => {
 			it('Returns a group with a matching gid')
 			it('Returns a 404 if no group is found')
 			it('Handles a malformed gid')

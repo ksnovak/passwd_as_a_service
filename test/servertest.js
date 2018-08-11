@@ -7,7 +7,7 @@ var expect = chai.expect
 
 chai.use(chaiHttp)
 
-describe('App', () => {
+describe.skip('App', () => {
 
 })
 
