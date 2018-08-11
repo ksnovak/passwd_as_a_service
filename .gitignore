@@ -62,3 +62,5 @@ typings/
 
 # compiled ES6 -> JS files
 compiled
+
+test/testdata/edit*

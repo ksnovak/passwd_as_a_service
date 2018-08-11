@@ -1,10 +1,14 @@
 import chai from 'chai'
+import chaiAsPromised from 'chai-as-promised'
 import fileReader from '../src/fileReader.js'
 import 'babel-polyfill'
 import fs from 'fs'
 import moment from 'moment'
 
+chai.use(chaiAsPromised)
+
 var expect = chai.expect
+// var should = chai.should()
 
 describe('File operations', () => {
 	describe('Default file locations', () => {
@@ -49,7 +53,7 @@ describe('File operations', () => {
 		})
 	})
 
-	describe.only('Updates', () => {
+	describe('Updates', () => {
 
 		it('Should notice if the specified file got updated', (done) => {
 			let path = 'test/testdata/editable'
@@ -100,6 +104,7 @@ describe('File operations', () => {
 		it("Doesn't error on trying to unwatch a non-watched file", () => {
 			fileReader.unwatchFile('this/doesnt/exist')
 		})
+
 		it('Should re-read the specified file if it gets updated')
 
 		//Make sure there's nothing left being watched at the end of the test
@@ -109,12 +114,20 @@ describe('File operations', () => {
 		})
 	})
 
-	describe.skip('Parser', () => {
-		it('Should alert if passwd is malformed')
-		it('Should alert if groups is malformed')
-		it('Can interpret a single user')
+	describe('Parser', () => {
+		it('Can read data from a file', async function () {
+			fileReader.readFile('etc/passwd', function(contents) {
+				expect(contents).to.be.a('string')
+			})
+		})
+		it('Gives a 404 on trying to read a non-existent file', async function() {
+			return expect(fileReader.readFile('this/doesnt/exist')).to.be.rejectedWith(fileReader.fileNotFound)
+		})
 		it('Can interpret multiple users')
-		it('Will alert on malformed data')
+		it('Can interpret a single user')
 		it('Will handle empty data')
+		it('Will alert if passwd is malformed')
+		it('Will alert if groups is malformed')
+
 	})
 })

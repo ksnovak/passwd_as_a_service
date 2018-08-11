@@ -13,6 +13,11 @@ module.exports = {
 		default: {passwd: '/etc/passwd', groups: '/etc/groups'}
 	},
 
+	fileNotFound: {
+		name: 404,
+		message: 'File not found'
+	},
+
 	//Interpret the command-line arguments passed, using defaults as needed
 	parseArgs: function(args) {
 		let parsedArgs = minimist(args, this.minimistOptions);
@@ -39,9 +44,35 @@ module.exports = {
 		}
 	},
 
+	readFile: async function(path, callback) {
+		try {
+			let fileExists = await this.doesFileExist(path)
+			if (fileExists) {
+				fs.readFile(path, (err, data) => {
+					if (err) {
+						throw err;
+					}
+					else {
+						let contents = data.toString()
+						if (callback)
+							callback(contents)
+					}
+
+				})
+			}
+			else {
+				throw this.fileNotFound
+			}
+		}
+		catch (err) {
+			throw this.fileNotFound
+		}
+
+	},
+
 	//Watch the specified file for any changes, and run the appropriate callback as needed
 	watchFile: async function(path, changedCallback, otherCallback) {
-		if (this.doesFileExist(path)) {
+		if (await this.doesFileExist(path)) {
 			watcher.add(path).on('all', (event, path) => {
 
 				if (event == 'change') {
@@ -61,5 +92,5 @@ module.exports = {
 	//Remove the specified file from the watch list
 	unwatchFile: async function(path) {
 		watcher.unwatch(path)
-	}
+	},
 }
