@@ -41,9 +41,7 @@ describe('File reading', () => {
 
 	describe('File opening', () => {
 		it ('Can find an existing file', async function() {
-			let asdf = await fileReader.doesFileExist('etc/passwd')
-			console.log(asdf)
-			expect(asdf).to.be.true
+			expect(await fileReader.doesFileExist('etc/passwd')).to.be.true
 		})
 		it ('Should alert if file could not be found', async function () {
 			expect(await fileReader.doesFileExist('this/doesnt/exist.json')).to.be.false
