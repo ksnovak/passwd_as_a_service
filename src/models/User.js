@@ -5,7 +5,6 @@ Reference: http://www.yourownlinux.com/2015/07/etc-passwd-file-format-in-linux-e
 
 import Error from './Error'
 
-
 // User objects, as found in the passwd file. These are constructed by an individual line in that file.
 module.exports = class User {
 	constructor(data) {
@@ -15,8 +14,8 @@ module.exports = class User {
 		if (elems.length == 7) {
 			this.name = elems[0];
 			//elems[1] is password, which will always just be an x
-			this.uid = Number(elems[2]);
-			this.gid = Number(elems[3]);
+			this.uid = elems[2].length ? Number(elems[2]) : null;
+			this.gid = elems[3].length ? Number(elems[3]) : null;
 			this.comment = elems[4];
 			this.home = elems[5];
 			this.shell = elems[6];

@@ -97,7 +97,7 @@ module.exports = {
 	},
 
 	getGroups: async function(path, callback) {
-		// return this.readFileAndGetArray(path, this.parseGroups, Group, callback)
+		return this.readFileAndGetArray(path, this.buildArray, Group, callback)
 	},
 
 	//Given the file contents (either passwd or groups), and the type of object (user or group), parse and create an array of those objects
@@ -106,12 +106,10 @@ module.exports = {
 			let arr = []
 			let lines = contents.split('\n')
 
-
 			lines.map(line => {
 				let elem = new objType(line)
 				arr.push(elem)
 			})
-
 
 			//Only return the list if every single line was valid.
 			if (lines.length == arr.length) {

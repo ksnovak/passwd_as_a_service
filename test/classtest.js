@@ -1,6 +1,7 @@
 import chai from 'chai'
 import 'babel-polyfill'
 import User from '../src/models/User'
+import Group from '../src/models/Group'
 import Error from '../src/models/Error'
 
 var expect = chai.expect
@@ -28,10 +29,18 @@ describe('Error', () => {
 })
 
 describe('User', () => {
-	it('Should create a user from a well-formed string', () => {
-		expect(new User('root:x:0:0:root:/root:/bin/bash'))
-			.to.be.an('object')
-			.with.property('shell', '/bin/bash')
+	var goodUsers = [
+		{val: 'root:x:0:0:root:/root:/bin/bash', reason: 'standard makeup', test: '/bin/bash'},
+		{val: 'mailnull:x:47:47::/var/spool/mqueue:/sbin/nologin', reason: 'an empty comment', test: '/sbin/nologin'},
+		{val: 'shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown', reason: 'gid of 0', test: '/sbin/shutdown'}
+	]
+
+	goodUsers.forEach(elem => {
+		it(`Makes a user with ${elem.reason}`, () => {
+			expect(new User(elem.val))
+				.to.be.an('object')
+				.with.property('shell', elem.test)
+		})
 	})
 
 	var badUsers = [
@@ -48,22 +57,30 @@ describe('User', () => {
 	});
 })
 
-describe.only('Group', () => {
-	it ('Should create a group from a well-formed string', () => {
-		expect(new Group('adm:x:4:root,adm,daemon'))
-			.to.be.an('object')
-			.with.property('gid', 4)
+describe('Group', () => {
+	var goodGroups = [
+		{val: 'adm:x:4:root,adm,daemon', reason: 'standard makeup', test: 'adm'},
+		{val: 'games:x:20:', reason: 'an empty users list', test: 'games'},
+		{val: 'news:x:13:news', reason: 'a single user in group list', test: 'news'},
+	]
+
+	goodGroups.forEach(elem => {
+		it(`Makes a group with ${elem.reason}`, () => {
+			expect(new Group(elem.val))
+				.to.be.an('object')
+				.with.property('name', elem.test)
+		})
 	})
 
 	var badGroups = [
-		{val: '', reason: ''},
-		{val: '', reason: ''},
-		{val: '', reason: ''},
-		{val: '', reason: ''},
+		{val: 'root:x:3', reason: 'not enough fields'},
+		{val: 'sys:x::root,bin,adm', reason: 'no GID'},
+		{val: '', reason: 'empty string'},
+		{val: 'nobody:x:99:ibrahim:moizoos:', reason: 'too many fields'}
 	]
 
 	badGroups.forEach(elem => {
-		it (`Should reject group creation with ${elem.reason}`, () => {
+		it (`Reject group creation with ${elem.reason}`, () => {
 			expect(function() { let group = new Group(elem.val)}).to.throw(Error.malformedObject)
 		})
 	});

@@ -115,7 +115,7 @@ describe('File operations', () => {
 		})
 	})
 
-	describe.only('Parser', () => {
+	describe('Parser', () => {
 		it('Can read data from a file', async function () {
 			fileReader.readFile('etc/passwd', function(contents) {
 				expect(contents).to.be.a('string')
