@@ -4,6 +4,7 @@ import fileReader from '../src/fileReader.js'
 import 'babel-polyfill'
 import fs from 'fs'
 import moment from 'moment'
+import Errors from '../src/models/Error'
 
 chai.use(chaiAsPromised)
 
@@ -121,7 +122,7 @@ describe('File operations', () => {
 			})
 		})
 		it('Gives a 404 on trying to read a non-existent file', async function() {
-			return expect(fileReader.readFile('this/doesnt/exist')).to.be.rejectedWith(fileReader.fileNotFound)
+			return expect(fileReader.readFile('this/doesnt/exist')).to.be.rejectedWith(Errors.fileNotFound)
 		})
 		it('Can interpret multiple users', async function() {
 			let path = 'etc/passwd'
@@ -141,7 +142,7 @@ describe('File operations', () => {
 		})
 		it('Will alert if passwd is malformed', async function() {
 			let path = 'test/testdata/passwd_malformed'
-			return expect(fileReader.getPasswd(path)).to.be.rejectedWith(fileReader.malformed)
+			return expect(fileReader.getPasswd(path)).to.be.rejectedWith(Errors.fileNotFound)
 		})
 		it('Will alert if groups is malformed')
 
