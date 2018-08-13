@@ -1,3 +1,8 @@
+/* User objects, as represented in a computer's passwd file.
+Reference: http://www.yourownlinux.com/2015/07/etc-passwd-file-format-in-linux-explained.html
+
+*/
+
 import Error from './Error'
 
 
@@ -26,6 +31,6 @@ module.exports = class User {
 	//Checks to see that all fields of the User object are valid.
 	isValid() {
 		//Have to do !! because there are strings; without it, the last truthy string field would be returned, instead of a boolean value.
-		return !!(this.name && (typeof this.uid == 'number')  && (typeof this.gid == 'number') && (typeof this.comment == 'string') && this.home && this.shell)
+		return !!(this.name && !isNaN(this.uid)  && !isNaN(this.gid) && (typeof this.comment == 'string') && this.home && this.shell)
 	}
 }
