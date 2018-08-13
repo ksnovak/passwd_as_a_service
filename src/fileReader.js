@@ -41,6 +41,7 @@ module.exports = {
 		}
 	},
 
+	//Get the contents of the file, and return them as a string. Throw 404 if something goes wrong
 	readFile: async function(path, callback) {
 		try {
 			let fileExists = await this.doesFileExist(path)
@@ -63,14 +64,15 @@ module.exports = {
 		}
 	},
 
-	getPasswd: async function(path, callback) {
+	//Function to get an array of the relevant objects from the specified file
+	readFileAndGetArray: async function(path, buildArrayFunction, objType, callback) {
 		try {
 			let contents = await this.readFile(path)
 			if (contents) {
 				if (callback)
-					callback(contents)
+					callback(buildArrayFunction(contents, objType))
 
-				return this.parsePasswd(contents)
+				return buildArrayFunction(contents, objType)
 			}
 			else {
 				return []
@@ -78,32 +80,46 @@ module.exports = {
 
 		}
 		catch (err) {
-			throw Errors.fileNotFound
+			//We care about Malformed File errors; but any other kind of error caught, we just treat as a 404
+			if (err == Errors.malformedFile)
+				throw Errors.malformedFile
+			else
+				throw Errors.fileNotFound
 		}
 	},
 
-	parsePasswd: function(contents) {
-		let users = []
-		let lines = contents.split('\n')
 
-		lines.map(line => {
-			let user = new User(line)
+	//Retrieve the passwd file, and return an array of users from it
+	getPasswd: async function(path, callback) {
+		return this.readFileAndGetArray(path, this.buildArray, User, callback)
+	},
 
-			if (user.isValid()) {
-				users.push(user)
+	getGroups: async function(path, callback) {
+		// return this.readFileAndGetArray(path, this.parseGroups, Group, callback)
+	},
+
+	//Given the file contents (either passwd or groups), and the type of object (user or group), parse and create an array of those objects
+	buildArray: function(contents, objType) {
+		try {
+			let arr = []
+			let lines = contents.split('\n')
+
+
+			lines.map(line => {
+				let elem = new objType(line)
+				arr.push(elem)
+			})
+
+
+			//Only return the list if every single line was valid.
+			if (lines.length == arr.length) {
+				return arr
 			}
 			else {
 				throw Errors.malformedFile
 			}
-		})
-
-		console.log(`lines: ${lines.length}, users: ${users.length}`)
-
-		//Only return users if every single line was valid.
-		if (lines.length == users.length) {
-			return users
 		}
-		else {
+		catch (err) {
 			throw Errors.malformedFile
 		}
 	},

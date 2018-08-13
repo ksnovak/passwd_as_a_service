@@ -115,7 +115,7 @@ describe('File operations', () => {
 		})
 	})
 
-	describe('Parser', () => {
+	describe.only('Parser', () => {
 		it('Can read data from a file', async function () {
 			fileReader.readFile('etc/passwd', function(contents) {
 				expect(contents).to.be.a('string')
@@ -142,7 +142,7 @@ describe('File operations', () => {
 		})
 		it('Will alert if passwd is malformed', async function() {
 			let path = 'test/testdata/passwd_malformed'
-			return expect(fileReader.getPasswd(path)).to.be.rejectedWith(Errors.fileNotFound)
+			return expect(fileReader.getPasswd(path)).to.be.rejectedWith(Errors.malformedFile)
 		})
 		it('Will alert if groups is malformed')
 
