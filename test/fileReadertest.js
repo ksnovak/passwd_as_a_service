@@ -136,7 +136,7 @@ describe('File operations', () => {
 				.to.be.an('array')
 				.and.have.lengthOf(1)
 		})
-		it('Will handle empty data', async function() {
+		it('Will handle empty passwd data', async function() {
 			let path = 'test/testdata/passwd_empty'
 			expect(await fileReader.getPasswd(path))
 				.to.be.an('array')
@@ -146,7 +146,29 @@ describe('File operations', () => {
 			let path = 'test/testdata/passwd_malformed'
 			return expect(fileReader.getPasswd(path)).to.be.rejectedWith(Errors.malformedFile)
 		})
-		it('Will alert if groups is malformed')
+
+		it('Can interpret multiple groups', async function() {
+			let path = 'etc/groups'
+			expect(await fileReader.getGroups(path))
+				.to.be.an('array')
+		})
+		it('Can interpret a single group', async function() {
+			let path = 'test/testdata/groups_single'
+			expect(await fileReader.getGroups(path))
+				.to.be.an('array')
+				.and.have.lengthOf(1)
+		})
+
+		it('Will handle empty groups data', async function() {
+			let path = 'test/testdata/groups_empty'
+			expect(await fileReader.getGroups(path))
+				.to.be.an('array')
+				.and.have.lengthOf(0)
+		})
+		it('Will alert if groups is malformed', async function() {
+			let path = 'test/testdata/groups_malformed'
+			return expect(fileReader.getGroups(path)).to.be.rejectedWith(Errors.malformedFile)
+		})
 
 	})
 })
