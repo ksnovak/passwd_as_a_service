@@ -4,6 +4,7 @@ import 'babel-polyfill'
 import { promisify } from 'es6-promisify'
 import chokidar from 'chokidar'
 import User from './models/User'
+import Group from './models/Group'
 import Errors from './models/Error'
 
 let watcher = chokidar.watch()

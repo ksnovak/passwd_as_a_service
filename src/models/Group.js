@@ -23,7 +23,8 @@ module.exports = class Group {
 			this.gid = elems[2].length ? Number(elems[2]) : NaN
 
 			//Members list is allowed to be empty. But without this check, an empty list will turn into ['']
-			this.members = elems[3] ? elems[3].split(',') : []
+			let members = elems[3].replace('\r', '')
+			this.members = members ? members.split(',') : []
 		}
 
 
