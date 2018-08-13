@@ -1,19 +1,17 @@
+/* All of the different errors that're expected to be thrown within the system
 
-let FileNotFound = new Error('File not found')
-FileNotFound.name = 404
+*/
+let newError = function (name, message) {
+	let err = new Error(message)
+	err.name = name
 
-let MalformedFile = new Error('File is malformed')
-MalformedFile.name = 'malformedFile'
-
-let MalformedObject = new Error('Object is malformed')
-MalformedObject.name = 'malformedObject'
-
+	return err
+}
 
 module.exports = {
-	//Common error object to be thrown when something requested is not found
-	fileNotFound: FileNotFound,
-
-	malformedFile: MalformedFile,
-
-	malformedObject: MalformedObject
+	newError,
+	genericError: newError('generic', 'Something went wrong'),
+	fileNotFound: newError(404, 'File not found'),
+	malformedFile: newError('malformedFile', 'File is malformed'),
+	malformedObject: newError('malformedObject', 'Object is malformed'),
 }
