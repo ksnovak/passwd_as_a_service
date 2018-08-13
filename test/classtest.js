@@ -34,8 +34,20 @@ describe('User', () => {
 			.with.property('shell', '/bin/bash')
 	})
 
-	it ('Should error if a malformed string is passed', () => {
-		expect(function() { let user = new User('root:x')}).to.throw(Error.malformedObject)
+	var badUsers = [
+		{val: 'root:x', reason: 'not enough fields'},
+		{val: '', reason: 'empty string'},
+		{val: 'daemon:x:2:2:daemon:/sbin:/sbin/nologin:porkchops:sandwiches', reason: 'too many fields'},
+		{val: 'daemon:x:three:2:daemon:/sbin:/sbin/nologin', reason: 'no UID'}
+	]
+
+	badUsers.forEach(elem => {
+		it (`Should reject user creation with ${elem.reason}`, () => {
+			expect(function() { let user = new User(elem.val)}).to.throw(Error.malformedObject)
+		})
+	});
+})
+
 	})
 })
 

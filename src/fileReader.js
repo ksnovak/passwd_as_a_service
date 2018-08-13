@@ -69,10 +69,12 @@ module.exports = {
 		try {
 			let contents = await this.readFile(path)
 			if (contents) {
-				if (callback)
-					callback(buildArrayFunction(contents, objType))
+				let arr = buildArrayFunction(contents, objType)
 
-				return buildArrayFunction(contents, objType)
+				if (callback)
+					callback(arr)
+
+				return arr
 			}
 			else {
 				return []

@@ -126,18 +126,20 @@ describe('File operations', () => {
 		})
 		it('Can interpret multiple users', async function() {
 			let path = 'etc/passwd'
-
-			expect(await fileReader.getPasswd(path)).to.be.an('array')
+			expect(await fileReader.getPasswd(path))
+				.to.be.an('array')
 
 		})
 		it('Can interpret a single user', async function() {
 			let path = 'test/testdata/passwd_single'
-			expect(await fileReader.getPasswd(path)).to.be.an('array')
+			expect(await fileReader.getPasswd(path))
+				.to.be.an('array')
 				.and.have.lengthOf(1)
 		})
 		it('Will handle empty data', async function() {
 			let path = 'test/testdata/passwd_empty'
-			expect(await fileReader.getPasswd(path)).to.be.an('array')
+			expect(await fileReader.getPasswd(path))
+				.to.be.an('array')
 				.and.have.lengthOf(0)
 		})
 		it('Will alert if passwd is malformed', async function() {
