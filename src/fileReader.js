@@ -3,6 +3,8 @@ import minimist from 'minimist'
 import 'babel-polyfill'
 import { promisify } from 'es6-promisify'
 import chokidar from 'chokidar'
+import User from './models/User'
+import Errors from './models/Error'
 
 let watcher = chokidar.watch()
 
@@ -11,39 +13,6 @@ module.exports = {
 	minimistOptions: {
 		string: ['passwd', 'groups'],
 		default: {passwd: '/etc/passwd', groups: '/etc/groups'}
-	},
-
-	//Common error object to be thrown when something requested is not found
-	fileNotFound: {
-		name: 404,
-		message: 'File not found'
-	},
-
-	malformed: {
-		name: 'Malformed',
-		message: 'File is malformed'
-	},
-
-	//Class to build user objects, with a function to make sure it is properly formed
-	User: class {
-		constructor(data) {
-			let elems = data.split(':')
-
-			//There needs to be 7 properties in each line to be correctly formed. If it doesn't pass that check, it's invalid
-			if (elems.length == 7) {
-				this.name = elems[0];
-				//elems[1] is password, which will always just be an x
-				this.uid = Number(elems[2]);
-				this.gid = Number(elems[3]);
-				this.comment = elems[4];
-				this.home = elems[5];
-				this.shell = elems[6];
-			}
-		}
-
-		isValid() {
-			return (this.name && (this.uid || this.uid == 0)  && (this.gid || this.gid == 0) && (typeof this.comment == 'string') && this.home && this.shell)
-		}
 	},
 
 	//Interpret the command-line arguments passed, using defaults as needed
@@ -86,11 +55,11 @@ module.exports = {
 				return contents
 			}
 			else {
-				throw this.fileNotFound
+				throw Errors.fileNotFound
 			}
 		}
 		catch (err) {
-			throw this.fileNotFound
+			throw Errors.fileNotFound
 		}
 	},
 
@@ -98,6 +67,9 @@ module.exports = {
 		try {
 			let contents = await this.readFile(path)
 			if (contents) {
+				if (callback)
+					callback(contents)
+
 				return this.parsePasswd(contents)
 			}
 			else {
@@ -106,7 +78,7 @@ module.exports = {
 
 		}
 		catch (err) {
-			throw this.fileNotFound
+			throw Errors.fileNotFound
 		}
 	},
 
@@ -115,13 +87,13 @@ module.exports = {
 		let lines = contents.split('\n')
 
 		lines.map(line => {
-			let user = new this.User(line)
+			let user = new User(line)
 
 			if (user.isValid()) {
 				users.push(user)
 			}
 			else {
-				throw this.malformed
+				throw Errors.malformedFile
 			}
 		})
 
@@ -132,7 +104,7 @@ module.exports = {
 			return users
 		}
 		else {
-			throw this.malformed
+			throw Errors.malformedFile
 		}
 	},
 
