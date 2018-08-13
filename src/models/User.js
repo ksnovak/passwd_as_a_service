@@ -1,6 +1,12 @@
 /* User objects, as represented in a computer's passwd file.
 Reference: http://www.yourownlinux.com/2015/07/etc-passwd-file-format-in-linux-explained.html
 
+Example of User objects from requirements doc:
+[{“name”: “root”, “uid”: 0, “gid”: 0, “comment”: “root”, “home”: “/root”, “shell”: “/bin/bash”}, {“name”: “dwoodlins”, “uid”: 1001, “gid”: 1001, “comment”: “”, “home”: “/home/dwoodlins”, “shell”: “/bin/false”} ]
+[{“name”: “dwoodlins”, “uid”: 1001, “gid”: 1001, “comment”: “”, “home”: “/home/dwoodlins”, “shell”: “/bin/false”} ]
+{“name”: “dwoodlins”, “uid”: 1001, “gid”: 1001, “comment”: “”, “home”: “/home/dwoodlins”, “shell”: “/bin/false”}
+
+
 */
 
 import Error from './Error'
@@ -21,7 +27,6 @@ module.exports = class User {
 			this.shell = elems[6];
 		}
 
-		//TODO: How do we immediately reject if invalid?
 		if (!this.isValid()) {
 			throw Error.malformedObject
 		}

@@ -1,6 +1,12 @@
 /* User objects, as represented in a computer's passwd file.
 Reference: https://www.cyberciti.biz/faq/understanding-etcgroup-file/
 
+Example of Group objects from requirements doc:
+[{“name”: “_analyticsusers”, “gid”: 250, “members”: [“_analyticsd’,”_networkd”,”_timed”]}, {“name”: “docker”, “gid”: 1002, “members”: []}]
+[{“name”: “docker”, “gid”: 1002, “members”: [“dwoodlins”]} ]
+[{“name”: “_analyticsusers”, “gid”: 250, “members”: [“_analyticsd’,”_networkd”,”_timed”]} ]
+{“name”: “docker”, “gid”: 1002, “members”: [“dwoodlins”]}
+
 */
 
 import Errors from './Error'
