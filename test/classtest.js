@@ -48,7 +48,25 @@ describe('User', () => {
 	});
 })
 
+describe.only('Group', () => {
+	it ('Should create a group from a well-formed string', () => {
+		expect(new Group('adm:x:4:root,adm,daemon'))
+			.to.be.an('object')
+			.with.property('gid', 4)
 	})
+
+	var badGroups = [
+		{val: '', reason: ''},
+		{val: '', reason: ''},
+		{val: '', reason: ''},
+		{val: '', reason: ''},
+	]
+
+	badGroups.forEach(elem => {
+		it (`Should reject group creation with ${elem.reason}`, () => {
+			expect(function() { let group = new Group(elem.val)}).to.throw(Error.malformedObject)
+		})
+	});
 })
 
 // describe('Error')
