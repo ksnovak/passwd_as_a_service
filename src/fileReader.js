@@ -13,7 +13,7 @@ module.exports = {
 	//Default options to use for command-line args
 	minimistOptions: {
 		string: ['passwd', 'groups'],
-		default: {passwd: '/etc/passwd', groups: '/etc/groups'}
+		default: {passwd: 'etc/passwd', groups: 'etc/groups'}
 	},
 
 	//Interpret the command-line arguments passed, using defaults as needed
@@ -93,7 +93,7 @@ module.exports = {
 
 
 	//Retrieve the passwd file, and return an array of users from it
-	getPasswd: async function(path, callback) {
+	getUsers: async function(path, callback) {
 		return this.readFileAndGetArray(path, this.buildArray, User, callback)
 	},
 
