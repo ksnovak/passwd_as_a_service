@@ -6,7 +6,7 @@ const args = fileReader.parseArgs(process.argv)
 
 const server = express();
 
-routes(server)
+routes(server, args)
 
 //Start up the server, but only once; this prevents issues when doing mocha --watch
 if (!module.parent) {
@@ -14,5 +14,6 @@ if (!module.parent) {
 }
 
 module.exports = {
-	server
+	server,
+	args
 }

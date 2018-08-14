@@ -1,12 +1,34 @@
 import 'express'
+import fileReader from './fileReader'
+import { args } from './server'
 
-module.exports = function(app) {
+let users = [];
+
+async function getUsers (args) {
+	if (users && users.length == 0) {
+		return await fileReader.getUsers(args.passwd)
+	}
+	else {
+		return users
+	}
+}
+
+module.exports = function(app, args) {
+
+	app.use(async function(req, res, next) {
+		users = await getUsers(args)
+
+		next()
+	})
+
 	app.get('/entry', function(req, res) {
 		res.send('Hello world!')
 	})
 
-	app.get('/users', function(req, res) {
-		res.send('users')
+	//List of all users in the system
+	app.get('/users', async function(req, res) {
+
+		res.send(users)
 	})
 
 	//List of users matching specified query fields
